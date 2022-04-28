@@ -1,0 +1,25 @@
+name: "merges-api"
+replicaCount: 1
+
+images:
+  PullSecrets: 
+    name: kartoffelreg
+  repository: genesisproject.azurecr.io/mergesapi
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 3000
+
+volume:
+  - name: merges-api-volume
+    mountPath: /usr/src/app/dist/config
+    secretName: azure-secret 
+    shareName: system-genesis/merges-api
+    type: azurefile
+
+config:
+  configmaps: 
+    name: merges-api

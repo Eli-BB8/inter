@@ -1,0 +1,17 @@
+.image {
+    width: 300px;
+}
+
+.offer {
+    display: flex;
+    flex-flow: row;
+    margin: 23px 0;
+}
+
+.priceWrap {
+    width: 30vw;
+}
+
+.price {
+    text-align: end;
+}
