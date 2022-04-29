@@ -23,6 +23,8 @@ const Home: NextPage = () => {
   const HotelOffers = data.map((offer, i) => <HotelOffer name={offer.name} key={i} image={offer.image} price={offer.price}/>)
 
   useEffect(() => {
+    setData([]);
+
     const source = new EventSource(`http://localhost:7701/api/vacation?ski_site=${findSiteNum(site)}&from_date=${from}&to_date=${to}&group_size=${guests}`);
 
     source.addEventListener('open', () => {
@@ -30,7 +32,8 @@ const Home: NextPage = () => {
     });
 
     source.addEventListener('message', (e) => {
-      console.log(e.data);
+      console.log(new Date().getTime());
+      
       const message = JSON.parse(e.data);
       const newHotels = message.map((hotel: any) => {
         return {
@@ -40,20 +43,19 @@ const Home: NextPage = () => {
         }
       });
 
-      const newData = [...data, ...newHotels];
-      setData(newData);
-      // setDonation(data);
+      setData((data) => {
+        return [...data, ...newHotels];
+      });
     });
 
     source.addEventListener('error', (e) => {
-      console.error('Error: ',  e);
-      setData([]);
+      source.close();
     });
 
     return () => {
       source.close();
     };
-  }, [site, guests, from, to, data]);
+  }, [site, guests, from, to]);
 
   return (
     <div className={styles.container}>
